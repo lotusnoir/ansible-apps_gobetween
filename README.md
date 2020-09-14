@@ -5,7 +5,7 @@
 
 [![Build Status](https://travis-ci.com/lotusnoir/ansible-apps_gobetween.svg?branch=master)](https://travis-ci.com/lotusnoir/ansible-apps_gobetween)[![License](https://img.shields.io/badge/license-MIT%20License-brightgreen.svg)](https://opensource.org/licenses/MIT)[![Ansible Role](https://img.shields.io/badge/ansible%20role-apps__gobetween-blue)](https://galaxy.ansible.com/lotusnoir/ansible-apps_gobetween/)[![GitHub tag](https://img.shields.io/badge/version-latest-blue)](https://github.com/lotusnoir/ansible-apps_gobetween/tags)
 
-Deploy [gobetween]https://github.com/yyyar/gobetween/releases) load balancer system using ansible.
+Deploy [gobetween](https://github.com/yyyar/gobetween/releases) load balancer system using ansible.
 
 
 ## Role variables

@@ -32,7 +32,7 @@ bind = ":{{ gobetween_metrics_port }}"  # "host:port"
     [servers.{{ service.name }}.{{ service.protocol }}]
     max_responses = {{ service.max_reponses | default('10') }}
     max_requests  = {{ service.max_requests | default('1') }} 		    #"fire and forget" mode
-    transparent = {{ service.transparent | default('true') }}
+    transparent = {{ service.transparent | default('true') | lower }}
 
     [servers.{{ service.name }}.discovery]
     kind = "static"

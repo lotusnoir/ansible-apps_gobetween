@@ -1,0 +1,3 @@
+---
+gobetween_tgz: "gobetween_{{ gobetween_version }}_linux_amd64.tar.gz"
+gobetween_tgz_url: "https://github.com/yyyar/gobetween/releases/download/{{ gobetween_version }}/{{ gobetween_tgz }}"

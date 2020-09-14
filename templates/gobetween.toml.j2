@@ -1,0 +1,49 @@
+[logging]
+level = "{{ gobetween_log_level }}"   # "debug" | "info" | "warn" | "error"
+output = "{{ gobetween_log_path }}" # "stdout" | "stderr" | "/path/to/gobetween.log"
+
+[profiler]
+enabled = {{ gobetween_profiler }} # false | true
+bind = ":6060"  # "host:port"
+
+[api]
+enabled = {{ gobetween_api }}  # true | false
+bind = ":8888"  # "host:port"
+cors = false    # cross-origin resource sharing
+
+[metrics]
+enabled = {{ gobetween_metrics }} # false | true
+bind = ":{{ gobetween_metrics_port }}"  # "host:port"
+
+[defaults]
+
+[servers]
+{% for service in gobetween_groups %}
+  [servers.{{ service.name }}]
+  bind = "0.0.0.0:{{ service.port }}"
+  protocol = "{{ service.protocol | default('tcp')}}"
+  balance = "{{ service.balance | default('roundrobin')}}"
+
+  max_connections = 0               # Maximum simultaneous connections to the server
+  client_idle_timeout = "2m"        # Client inactivity duration before forced connection drop
+  backend_idle_timeout = "2m"       # Backend inactivity duration before forced connection drop
+  backend_connection_timeout = "0"  # Backend connection timeout (ignored in udp)
+
+    [servers.{{ service.name }}.{{ service.protocol }}]
+    max_responses = {{ service.max_reponses | default('10') }}
+    max_requests  = {{ service.max_requests | default('1') }} 		    #"fire and forget" mode
+    transparent = {{ service.transparent | default('true') }}
+
+    [servers.{{ service.name }}.discovery]
+    kind = "static"
+    static_list = [ {% for host in service.targets %}"{{ host }}:{{ service.port }}"{{"," if not loop.last else "" }} {% endfor %}]
+
+    [servers.{{ service.name }}.healthcheck]   # (optional)
+    kind = "exec"
+    interval = "30s"                 # (required) healthcheck running interval
+    timeout = "5s"
+    exec_command = "{{ gobetween_install_dir }}/healthcheck.sh"      # (required) command to execute
+    exec_expected_positive_output = "success"           # (required) expected output of command in case of success
+    exec_expected_negative_output = "fail"           # (required) expected output of command in case of failure
+
+{% endfor %}

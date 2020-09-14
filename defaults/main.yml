@@ -1,0 +1,32 @@
+---
+# Install
+gobetween_version:              "0.8.0"
+gobetween_binary_file:          "/usr/local/bin/gobetween"
+gobetween_install_dir:          "/etc/gobetween"
+gobetween_install_local:        false
+gobetween_local_file: ""
+ulimit:                         "65536"
+gobetween_log_path:             /var/log/gobetween.log
+gobetween_user:                 "gobetween"
+
+# config
+# gobetween_target_servers: {{ groups['group name'] }}
+gobetween_target_servers:
+  - localhost
+  # - server2
+  # - server3 ...
+gobetween_log_level:            info
+gobetween_profiler:             "false"
+gobetween_api:                  "false"
+gobetween_metrics:              "true"
+gobetween_metrics_port:         "9101"
+gobetween_groups:
+  - name: syslog2
+    port: 5124
+    protocol: tcp
+    balance: roundrobin
+    transparent: true
+    max_reponses: 10
+    max_requests: 1
+    targets: "{{ gobetween_target_servers }}"
+# - {name: syslog3, port: 514, protocol: udp, targets: ["server1", "server2" ] }

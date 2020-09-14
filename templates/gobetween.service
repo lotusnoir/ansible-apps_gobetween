@@ -1,0 +1,18 @@
+{{ ansible_managed | comment }} 
+
+[Unit]
+Description=Gobetween 
+After=network-online.target
+StartLimitInterval=0
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=/usr/local/bin/gobetween -c /etc/gobetween/gobetween.toml
+ExecReload=/bin/kill -HUP $MAINPID
+SyslogIdentifier=gobetween
+RestartSec=1
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target

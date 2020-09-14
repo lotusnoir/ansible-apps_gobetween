@@ -1,0 +1,157 @@
+---
+- name: "Check for gobetween executable file"
+  stat:
+    path: '{{ gobetween_binary_file }}'
+  changed_when: false
+  register: gobetween_binary
+
+- name: "Check for gobetween version"
+  command: '{{ gobetween_binary_file }} -v'
+  changed_when: false
+  register: gobetween_ins_version
+  when: gobetween_binary.stat.exists
+
+- when: not gobetween_binary.stat.exists or ( gobetween_ins_version is defined and gobetween_ins_version.stdout != "0.8.0+snapshot")
+  block:
+    - name: "Download gobetween..."
+      get_url:
+        url: '{{ gobetween_tgz_url }}'
+        dest: /tmp/{{ gobetween_tgz }}
+        timeout: 120
+        mode: 0644
+      when: not gobetween_install_local
+
+    - name: "Unarchive gobetween..."
+      unarchive:
+        remote_src: true
+        src: /tmp/{{ gobetween_tgz }}
+        dest: '/tmp/'
+        mode: 0644
+      when: not gobetween_install_local
+
+    - name: "Copy gobetween binary..."
+      copy:
+        src: '/tmp/gobetween'
+        dest: '{{ gobetween_binary_file }}'
+        mode: '0755'
+        remote_src: true
+      when: not gobetween_install_local
+
+    - name: "Copy gobetween local binary..."
+      copy:
+        src: '{{ gobetween_local_file }}'
+        dest: '{{ gobetween_binary_file }}'
+        mode: '0755'
+      when: gobetween_install_local
+
+    - name: "Create an install dir {{ gobetween_install_dir }}"
+      file:
+        path: "{{ gobetween_install_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: "Change ulimit to {{ ulimit }} for root"
+      pam_limits:
+        domain: root
+        limit_type: '-'
+        limit_item: nofile
+        value: "{{ ulimit }}"
+
+    - name: "Change ulimit to {{ ulimit }} for all"
+      pam_limits:
+        domain: '*'
+        limit_type: '-'
+        limit_item: nofile
+        value: "{{ ulimit }}"
+
+    - name: "Create log file"
+      file:
+        path: "{{ gobetween_log_path }}"
+        mode: '0644'
+        state: touch
+
+# - name: Allow gobetween to bindport under 1024
+# shell: setcap CAP_NET_BIND_SERVICE=+eip /usr/local/bin/gobetween
+
+## healthcheck
+- name: "Install requierement"
+  package:
+    name: ssh
+    state: present
+
+- name: "Generate ssh key for root"
+  user:
+    name: root
+    ssh_key_comment: "gobetween health check"
+    ssh_key_file: ".ssh/id_rsa"
+    generate_ssh_key: true
+  register: gobetween_ssh_user
+
+
+- name: "Create config for root ssh"
+  copy:
+    dest: "/root/.ssh/config"
+    content: |
+      StrictHostKeyChecking no
+    mode: 0644
+
+
+- name: "Create a node user {{ gobetween_user }}"
+  user:
+    name: "{{ gobetween_user }}"
+    state: present
+    shell: /bin/bash
+    expires: -1
+  delegate_to: "{{ item }}"
+  loop: "{{ gobetween_target_servers }}"
+  ignore_errors: true
+
+- name: "Set node user password valid time"
+  command: chage -M 99999 "{{ gobetween_user }}"
+  delegate_to: "{{ item }}"
+  loop: "{{ gobetween_target_servers }}"
+  changed_when: false
+
+
+- name: "Deploy {{ gobetween_user }} authorized_key on nodes to check"
+  authorized_key:
+    user: "{{ gobetween_user }}"
+    key: "{{ gobetween_ssh_user.ssh_public_key }}"
+    state: present
+  delegate_to: "{{ item }}"
+  loop: "{{ gobetween_target_servers }}"
+
+
+- name: "Create config file {{ gobetween_install_dir }}/gobetween.toml"
+  template:
+    src: gobetween.toml.j2
+    dest: "{{ gobetween_install_dir }}/gobetween.toml"
+    mode: 0644
+  notify:
+    - restart gobetween
+  tags: config
+
+
+- name: "Copy healthcheck script"
+  copy:
+    src: "healthcheck.sh"
+    dest: "{{ gobetween_install_dir }}"
+    mode: '0755'
+  notify:
+    - restart gobetween
+
+- name: "Create init script for gobetween"
+  template:
+    src: gobetween.service
+    dest: /lib/systemd/system/
+    mode: 0644
+  notify: "restart gobetween"
+
+
+- name: "Enable service gobetween and ensure it is not masked"
+  systemd:
+    name: gobetween
+    state: started
+    enabled: true
+    masked: false
+    daemon_reload: true

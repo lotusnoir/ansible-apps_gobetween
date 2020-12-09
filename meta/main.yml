@@ -3,16 +3,16 @@ galaxy_info:
   author: "Philippe leal"
   description: "Install and configure gobetween load balancer"
   role_name: apps_gobetween
-  license: "GNU General Public License v3.0"
+  license: "license: Apache License, Version 2.0"
   min_ansible_version: 2.8
 
   platforms:
     - name: "Ubuntu"
       versions:
-        - "focal"
+        - "all"
     - name: "Debian"
       versions:
-        - "buster"
+        - "all"
 
   galaxy_tags:
     - lb

@@ -1,0 +1,38 @@
+---
+#- name: "Change ulimit to {{ gobetween_ulimit }} for root"
+#  pam_limits:
+#    domain: root
+#    limit_type: '-'
+#    limit_item: nofile
+#    value: "{{ gobetween_ulimit }}"
+#
+#- name: "Change ulimit to {{ gobetween_ulimit }} for all"
+#  pam_limits:
+#    domain: '*'
+#    limit_type: '-'
+#    limit_item: nofile
+#    value: "{{ gobetween_ulimit }}"
+#
+# - name: Allow gobetween to bindport under 1024
+# shell: setcap CAP_NET_BIND_SERVICE=+eip /usr/local/bin/gobetween
+
+- name: "Create config file {{ gobetween_install_dir }}/gobetween.toml"
+  template:
+    src: "gobetween.toml.j2"
+    dest: "{{ gobetween_install_dir }}/gobetween.toml"
+    owner: "{{ gobetween_owner_group }}"
+    group: "{{ gobetween_owner_group }}"
+    mode: 0644
+  notify:
+    - restart gobetween
+  tags: config
+
+- name: "Create init script for gobetween"
+  template:
+    src: "gobetween.service.j2"
+    dest: "/etc/systemd/system/gobetween.service"
+    owner: root
+    group: root
+    mode: 0644
+  notify: 
+    - restart gobetween

@@ -1,0 +1,54 @@
+---
+- name: "Install requierement"
+  package:
+    name: ssh
+    state: present
+
+- name: "Generate ssh key for root"
+  user:
+    name: root
+    ssh_key_comment: "gobetween health check"
+    ssh_key_file: ".ssh/id_rsa"
+    generate_ssh_key: true
+  register: gobetween_ssh_user
+
+- name: "Create config for root ssh"
+  copy:
+    dest: "/root/.ssh/config"
+    content: |
+      StrictHostKeyChecking no
+    mode: 0644
+
+#- name: "Create a node user {{ gobetween_healthcheck_user }}"
+#  user:
+#    name: "{{ gobetween_healthcheck_user }}"
+#    state: present
+#    shell: /bin/bash
+#    expires: -1
+#  delegate_to: "{{ item }}"
+#  loop: "{{ gobetween_target_servers }}"
+#  ignore_errors: true
+#
+#- name: "Set node user password valid time"
+#  shell: chage -M 99999 {{ gobetween_healthcheck_user }}
+#  delegate_to: "{{ item }}"
+#  loop: "{{ gobetween_target_servers }}"
+#  changed_when: false
+#
+#- name: "Deploy {{ gobetween_healthcheck_user }} authorized_key on nodes to check"
+#  authorized_key:
+#    user: "{{ gobetween_healthcheck_user }}"
+#    key: "{{ gobetween_ssh_user.ssh_public_key }}"
+#    state: present
+#  delegate_to: "{{ item }}"
+#  loop: "{{ gobetween_target_servers }}"
+
+- name: "Copy healthcheck script"
+  copy:
+    src: "healthcheck.sh"
+    dest: "{{ gobetween_install_dir }}"
+    owner: "{{ gobetween_owner_group }}"
+    group: "{{ gobetween_owner_group }}"
+    mode: '0755'
+  notify:
+    - restart gobetween

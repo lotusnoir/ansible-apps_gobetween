@@ -1,6 +1,6 @@
 [logging]
 level = "{{ gobetween_log_level }}"   # "debug" | "info" | "warn" | "error"
-output = "{{ gobetween_log_path }}" # "stdout" | "stderr" | "/path/to/gobetween.log"
+output = "{{ gobetween_log_file }}" # "stdout" | "stderr" | "/path/to/gobetween.log"
 
 [profiler]
 enabled = {{ gobetween_profiler }} # false | true
@@ -9,7 +9,7 @@ bind = ":{{ gobetween_profiler_port }}"  # "host:port"
 [api]
 enabled = {{ gobetween_api }}  # true | false
 bind = ":{{ gobetween_api_port }}"  # "host:port"
-cors = false    # cross-origin resource sharing
+cors = {{ gobetween_api_cors }}    # cross-origin resource sharing
 
 [metrics]
 enabled = {{ gobetween_metrics }} # false | true
@@ -24,7 +24,7 @@ bind = ":{{ gobetween_metrics_port }}"  # "host:port"
   protocol = "{{ service.protocol | default('tcp') }}"
   balance = "{{ service.balance | default('roundrobin') }}"
 
-  max_connections = "{{ service.max_connections | default('0') }}"       # Maximum simultaneous connections to the server
+  max_connections = {{ service.max_connections | default('0') }}       # Maximum simultaneous connections to the server
   client_idle_timeout = "{{ service.client_idle_timeout | default('2m') }}"        # Client inactivity duration before forced connection drop
   backend_idle_timeout = "{{ service.backend_idle_timeout | default('2m') }}"       # Backend inactivity duration before forced connection drop
   backend_connection_timeout = "{{ service.backend_conn_timeout | default('0') }}"  # Backend connection timeout (ignored in udp)

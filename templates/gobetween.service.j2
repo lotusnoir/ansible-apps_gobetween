@@ -1,0 +1,26 @@
+{{ ansible_managed | comment }} 
+
+[Unit]
+Description=Gobetween 
+Documentation=https://github.com/yyyar/gobetween/wiki
+After=network-online.target
+StartLimitInterval=0
+
+[Service]
+Type=simple
+#User={{ gobetween_owner }}
+#Group={{ gobetween_owner_group }}
+LimitNOFILE=infinity
+
+ExecStart={{ gobetween_binary_file }} -c {{ gobetween_install_dir }}/gobetween.toml
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+
+Restart=always
+RestartSec=1
+SyslogIdentifier=gobetween
+PermissionsStartOnly=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

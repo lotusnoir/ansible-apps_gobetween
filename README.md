@@ -27,9 +27,8 @@ Deploy [gobetween](https://github.com/yyyar/gobetween/releases) load balancer sy
 | `gobetween_install_dir`    | /etc/gobetween           | Config files path |
 | `gobetween_install_local`  | false                    | allow to install a local version |
 | `gobetween_local_file`     | ""                       | path to local gobetween binary file |
-| `ulimit`                   | 65536                    | ulimit hard and soft file limit|
-| `gobetween_log_path`       | /var/log/gobetween.log   | path for the log file|
-| `gobetween_check_user`     | gobetween                | healthcheck ssh user to connect targets|
+| `gobetween_log_file`       | /var/log/gobetween.log   | path for the log file|
+| `gobetween_healthcheck_user` | gobetween                | healthcheck ssh user to connect targets|
 | `gobetween_target_servers` | ["localhost"]            | |
 | `gobetween_log_level`      | info                     | log level |
 | `gobetween_profiler`       | false                    | expose profiler endpoint |
@@ -37,6 +36,11 @@ Deploy [gobetween](https://github.com/yyyar/gobetween/releases) load balancer sy
 | `gobetween_metrics`        | true                     | expose prometheus metrics endpoint |
 | `gobetween_metrics_port`   | 9101                     | metrics endpoint port |
 | `gobetween_groups`         | {}                       | servers to configure on gobetween.toml |
+
+## Installation steps
+
+1. Install binary from repo or from given path
+2. Create user / group 
 
 ## Examples
 

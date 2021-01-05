@@ -87,7 +87,6 @@
     generate_ssh_key: true
   register: gobetween_ssh_user
 
-
 - name: "Create config for root ssh"
   copy:
     dest: "/root/.ssh/config"
@@ -95,10 +94,9 @@
       StrictHostKeyChecking no
     mode: 0644
 
-
-- name: "Create a node user {{ gobetween_user }}"
+- name: "Create a node user {{ gobetween_check_user }}"
   user:
-    name: "{{ gobetween_user }}"
+    name: "{{ gobetween_check_user }}"
     state: present
     shell: /bin/bash
     expires: -1
@@ -107,15 +105,14 @@
   ignore_errors: true
 
 - name: "Set node user password valid time"
-  command: chage -M 99999 "{{ gobetween_user }}"
+  shell: chage -M 99999 {{ gobetween_check_user }}
   delegate_to: "{{ item }}"
   loop: "{{ gobetween_target_servers }}"
   changed_when: false
 
-
-- name: "Deploy {{ gobetween_user }} authorized_key on nodes to check"
+- name: "Deploy {{ gobetween_check_user }} authorized_key on nodes to check"
   authorized_key:
-    user: "{{ gobetween_user }}"
+    user: "{{ gobetween_check_user }}"
     key: "{{ gobetween_ssh_user.ssh_public_key }}"
     state: present
   delegate_to: "{{ item }}"
@@ -131,7 +128,6 @@
     - restart gobetween
   tags: config
 
-
 - name: "Copy healthcheck script"
   copy:
     src: "healthcheck.sh"
@@ -146,7 +142,6 @@
     dest: /lib/systemd/system/
     mode: 0644
   notify: "restart gobetween"
-
 
 - name: "Enable service gobetween and ensure it is not masked"
   systemd:

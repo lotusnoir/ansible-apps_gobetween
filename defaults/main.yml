@@ -7,7 +7,7 @@ gobetween_install_local:        false
 gobetween_local_file: ""
 ulimit:                         "65536"
 gobetween_log_path:             /var/log/gobetween.log
-gobetween_user:                 "gobetween"
+gobetween_check_user:                 "gobetween"
 
 # config
 # gobetween_target_servers: {{ groups['group name'] }}
@@ -17,16 +17,30 @@ gobetween_target_servers:
   # - server3 ...
 gobetween_log_level:            info
 gobetween_profiler:             "false"
+gobetween_profiler_port:        "6060"
 gobetween_api:                  "false"
+gobetween_api_port:             "8888"
 gobetween_metrics:              "true"
 gobetween_metrics_port:         "9101"
 gobetween_groups:
   - name: syslog2
+    bind_address: 0.0.0.0
     port: 5124
     protocol: tcp
     balance: roundrobin
+    max_connections: 0
+    client_idle_timeout: 2m
+    backend_idle_timeout: 2m
+    backend_conn_timeout: 0
     transparent: true
     max_reponses: 10
     max_requests: 1
     targets: "{{ gobetween_target_servers }}"
+#    healthcheck_enable: true
+#    healthcheck_kind: exec
+#    healthcheck_interval: 30s
+#    healthcheck_timeout: 5s
+#    healthcheck_command: 5s
+#    healthcheck_output_positive: sucess
+#    healthcheck_output_negative: fail
 # - {name: syslog3, port: 514, protocol: udp, targets: ["server1", "server2" ] }

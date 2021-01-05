@@ -1,0 +1,21 @@
+---
+- name: "Create a node user {{ gobetween_healthcheck_user }} on {{ delegate_host }}"
+  user:
+    name: "{{ gobetween_healthcheck_user }}"
+    state: present
+    shell: /bin/bash
+    expires: -1
+  ignore_errors: true
+  delegate_to: "{{ delegate_host }}"
+
+- name: "Set node user password valid time on {{ delegate_host }}"
+  shell: chage -M 99999 {{ gobetween_healthcheck_user }}
+  changed_when: false
+  delegate_to: "{{ delegate_host }}"
+
+- name: "Deploy {{ gobetween_healthcheck_user }} authorized_key on {{ delegate_host }}"
+  authorized_key:
+    user: "{{ gobetween_healthcheck_user }}"
+    key: "{{ gobetween_ssh_user.ssh_public_key }}"
+    state: present
+  delegate_to: "{{ delegate_host }}"

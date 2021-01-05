@@ -43,6 +43,11 @@
 #  delegate_to: "{{ item }}"
 #  loop: "{{ gobetween_target_servers }}"
 
+- include_tasks: deploy_user.yml
+  loop: "{{ gobetween_target_servers }}"
+  loop_control:
+    loop_var: delegate_host
+
 - name: "Copy healthcheck script"
   copy:
     src: "healthcheck.sh"

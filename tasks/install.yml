@@ -28,6 +28,7 @@
     owner: "{{ gobetween_owner_group }}"
     group: "{{ gobetween_owner_group }}"
     mode: 0644
+  changed_when: false
 
 - when: not gobetween_binary.stat.exists or ( gobetween_ins_version is defined and gobetween_ins_version.stdout != "0.8.0+snapshot")
   block:

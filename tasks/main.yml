@@ -6,7 +6,7 @@
     - gobetween_health
     - gobetween_run
 
-- include: install.yml 
+- include: install.yml
   become: true
   tags:
     - gobetween_install

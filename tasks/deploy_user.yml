@@ -9,7 +9,7 @@
   delegate_to: "{{ delegate_host }}"
 
 - name: "Set node user password valid time on {{ delegate_host }}"
-  shell: chage -M 99999 {{ gobetween_healthcheck_user }}
+  command: chage -M 99999 {{ gobetween_healthcheck_user }}
   changed_when: false
   delegate_to: "{{ delegate_host }}"
 

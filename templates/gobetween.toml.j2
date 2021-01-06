@@ -18,7 +18,7 @@ bind = ":{{ gobetween_metrics_port }}"  # "host:port"
 [defaults]
 
 [servers]
-{% for service in gobetween_groups %}
+{% for service in gobetween_targets %}
   [servers.{{ service.name }}]
   bind = "{{ service.bind_address | default('0.0.0.0') }}:{{ service.port }}"
   protocol = "{{ service.protocol | default('tcp') }}"
@@ -38,12 +38,14 @@ bind = ":{{ gobetween_metrics_port }}"  # "host:port"
     kind = "static"
     static_list = [ {% for host in service.targets %}"{{ host }}:{{ service.port }}"{{"," if not loop.last else "" }} {% endfor %}]
 
-    [servers.{{ service.name }}.healthcheck]   # (optional)
-    kind = "exec"
-    interval = "30s"                 # (required) healthcheck running interval
-    timeout = "5s"
-    exec_command = "{{ gobetween_install_dir }}/healthcheck.sh"      # (required) command to execute
-    exec_expected_positive_output = "success"           # (required) expected output of command in case of success
-    exec_expected_negative_output = "fail"           # (required) expected output of command in case of failure
+    {% if gobetween_healthcheck[service.name] is defined %}
+[servers.{{ service.name }}.healthcheck]   # (optional)
+    kind = "{{ gobetween_healthcheck[service.name].kind | default('exec') }}"
+    interval = "{{ gobetween_healthcheck[service.name].interval | default('30s') }}"
+    timeout = "{{ gobetween_healthcheck[service.name].timeout | default('5s') }}"
+    exec_command = "{{ gobetween_healthcheck[service.name].exec_command }}"
+    exec_expected_positive_output = "{{ gobetween_healthcheck[service.name].exec_expected_positive_output }}"
+    exec_expected_negative_output = "{{ gobetween_healthcheck[service.name].exec_expected_negative_output }}"
+    {% endif %}
 
 {% endfor %}

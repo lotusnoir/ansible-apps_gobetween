@@ -18,14 +18,14 @@ gobetween_target_servers:
   # - server2
   # - server3 ...
 gobetween_log_level:            info
-gobetween_profiler:             false
+gobetween_profiler:             "false"
 gobetween_profiler_port:        "6060"
-gobetween_api:                  false
+gobetween_api:                  "false"
 gobetween_api_port:             "8888"
-gobetween_api_cors:             false
-gobetween_metrics:              true
+gobetween_api_cors:             "false"
+gobetween_metrics:              "true"
 gobetween_metrics_port:         "9101"
-gobetween_groups:
+gobetween_targets:
   - name: syslog2
     bind_address: 0.0.0.0
     port: 5124
@@ -39,11 +39,13 @@ gobetween_groups:
     max_reponses: 10
     max_requests: 1
     targets: "{{ gobetween_target_servers }}"
-#    healthcheck_enable: true
-#    healthcheck_kind: exec
-#    healthcheck_interval: 30s
-#    healthcheck_timeout: 5s
-#    healthcheck_command: 5s
-#    healthcheck_output_positive: sucess
-#    healthcheck_output_negative: fail
 # - {name: syslog3, port: 514, protocol: udp, targets: ["server1", "server2" ] }
+
+gobetween_healthcheck:
+  syslog2:
+    kind: exec
+    interval: 30s
+    timeout: 5s
+    exec_command: "{{ gobetween_install_dir }}/healthcheck.sh"
+    exec_expected_positive_output: sucess
+    exec_expected_negative_output: fail

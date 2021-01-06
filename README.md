@@ -17,6 +17,12 @@
 
 Deploy [gobetween](https://github.com/yyyar/gobetween/releases) load balancer system using ansible.
 
+## Installation steps
+
+1. Create user / group / directories
+2. Install binary from repo or from given path
+3. Configure config file
+4. Configure healthchecks (optional)
 
 ## Role variables
 
@@ -41,14 +47,15 @@ Deploy [gobetween](https://github.com/yyyar/gobetween/releases) load balancer sy
 | `gobetween_targets`           | {}                       | servers to configure on gobetween.toml |
 | `gobetween_healthcheck`       | []                       | configure healthcheck for each target |
 
-## Installation steps
+## Metrics
 
-1. Create user / group / directories
-2. Install binary from repo or from given path
-3. Configure config file
-4. Configure healthchecks (optional)
+Metrics are exposed in prometheus format directly from the application with gobetween_metrics: enable on gobetween_metrics_port
 
-## Examples
+## Metrics Dashboard
+
+A sample dashboard is available here: [https://grafana.com/grafana/dashboards/13571](https://grafana.com/grafana/dashboards/13571)
+
+## Playbook example
 
 	---
 	- hosts: apps_gobetween

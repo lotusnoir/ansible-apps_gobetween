@@ -47,5 +47,5 @@ gobetween_healthcheck:
     interval: 30s
     timeout: 5s
     exec_command: "{{ gobetween_install_dir }}/healthcheck.sh"
-    exec_expected_positive_output: sucess
+    exec_expected_positive_output: success
     exec_expected_negative_output: fail

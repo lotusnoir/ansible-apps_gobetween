@@ -36,3 +36,8 @@
     mode: 0644
   notify:
     - restart gobetween
+
+- name: "Add conf to logrotate"
+  template:
+    src: gobetween.logrotate
+    dest: /etc/logrotate.d/gobetween

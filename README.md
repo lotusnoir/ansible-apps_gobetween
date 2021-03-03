@@ -28,7 +28,7 @@ Deploy [gobetween](https://github.com/yyyar/gobetween/releases) load balancer sy
 
 ## Role variables
 
-| Nam e                         | Default Value            | Description                        |
+| Name                          | Default Value            | Description                        |
 | ----------------------------- | ------------------------ | -----------------------------------|
 | `gobetween_version`           | 0.8.0                    | gobetween version |
 | `gobetween_binary_file`       | /usr/local/bin/gobetween | gobetween binary name|
@@ -84,7 +84,7 @@ Deploy [gobetween](https://github.com/yyyar/gobetween/releases) load balancer sy
 Metrics are exposed in prometheus format directly from the application with gobetween_metrics: enable on gobetween_metrics_port
 
 
-## Metrics Dashboard
+## Grafana Dashboard
 
 A sample dashboard is available here: [https://grafana.com/grafana/dashboards/13571](https://grafana.com/grafana/dashboards/13571)
 

@@ -1,35 +1,8 @@
 ---
-- include: preflight.yml
-  tags:
-    - gobetween_install
-    - gobetween_configure
-    - gobetween_health
-    - gobetween_run
+### Checks
+- name: Import check tasks
+  import_tasks: check.yml
 
-- include: install.yml
-  become: true
-  tags:
-    - gobetween_install
-
-- include: configure.yml
-  become: true
-  tags:
-    - gobetween_configure
-
-- include: healthcheck.yml
-  become: true
-  tags:
-    - gobetween_health
-
-- name: "Ensure gobetween service is started and enabled"
-  become: true
-  systemd:
-    daemon_reload: true
-    name: gobetween
-    state: started
-    enabled: true
-    masked: false
-  tags:
-    - gobetween_run
-
-- meta: flush_handlers
+### Install
+- name: Import install tasks
+  import_tasks: install.yml

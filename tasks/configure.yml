@@ -41,3 +41,4 @@
   template:
     src: gobetween.logrotate
     dest: /etc/logrotate.d/gobetween
+    mode: 0644

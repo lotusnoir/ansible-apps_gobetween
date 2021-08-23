@@ -11,20 +11,20 @@ gobetween_owner: gobetween
 gobetween_owner_group: gobetween
 
 # config
-# gobetween_target_servers: {{ groups['group name'] }}
-gobetween_healthcheck_user:   "gobetween"
+gobetween_healthcheck_user: "gobetween"
+#gobetween_target_servers: {{ groups['group name'] }}
 gobetween_target_servers:
   - localhost
   # - server2
   # - server3 ...
-gobetween_log_level:            info
-gobetween_profiler:             "false"
-gobetween_profiler_port:        "6060"
-gobetween_api:                  "false"
-gobetween_api_port:             "8888"
-gobetween_api_cors:             "false"
-gobetween_metrics:              "true"
-gobetween_metrics_port:         "9101"
+gobetween_log_level: info
+gobetween_profiler: "false"
+gobetween_profiler_port: "6060"
+gobetween_api: "false"
+gobetween_api_port: "8888"
+gobetween_api_cors: "false"
+gobetween_metrics: "true"
+gobetween_metrics_port: "9101"
 gobetween_targets:
   - name: syslog2
     bind_address: 0.0.0.0

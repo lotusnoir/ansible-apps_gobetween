@@ -1,24 +1,24 @@
 ---
 galaxy_info:
-  author: "Philippe leal"
-  description: "Install and configure gobetween load balancer"
+  author: lotusnoir
   role_name: apps_gobetween
-  license: "license: Apache License, Version 2.0"
+  description: "Deploy [gobetween](https://github.com/yyyar/gobetween/releases) load balancer system using ansible"
+  license: "Apache License, Version 2.0"
   min_ansible_version: 2.8
 
   platforms:
     - name: "Ubuntu"
       versions:
-        - "xenial"
+        - "focal"
         - "bionic"
     - name: "Debian"
       versions:
+        - "bullseye"
         - "buster"
-        - "stretch"
 
   galaxy_tags:
-    - lb
-    - gobetween
+    - loadbalancer
     - udp
+    - gobetween
 
 dependencies: []

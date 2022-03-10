@@ -35,17 +35,31 @@ bind = ":{{ gobetween_metrics_port }}"  # "host:port"
     transparent = {{ service.transparent | default('true') | lower }}
 
     [servers.{{ service.name }}.discovery]
-    kind = "static"
+     kind = "{{ service.kind }}"
+    {% if service.kind == 'static' %}
     static_list = [ {% for host in service.targets %}"{{ host }}:{{ service.port }}"{{"," if not loop.last else "" }} {% endfor %}]
+    {% elif service.kind == 'srv' %}
+    srv_lookup_server = "{{ service.srv_lookup_server }}:53"  # (required)
+    srv_lookup_pattern = "{{ service.srv_lookup_pattern }}"  # (required)
+    srv_dns_protocol = "udp"  # (optional, since v0.2.0) - udp | tcp (default: "udp")
+    {% endif %}
 
     {% if gobetween_healthcheck[service.name] is defined %}
 [servers.{{ service.name }}.healthcheck]   # (optional)
+
     kind = "{{ gobetween_healthcheck[service.name].kind | default('exec') }}"
     interval = "{{ gobetween_healthcheck[service.name].interval | default('30s') }}"
     timeout = "{{ gobetween_healthcheck[service.name].timeout | default('5s') }}"
+    {% if gobetween_healthcheck[service.name].kind == 'exec' %}
     exec_command = "{{ gobetween_healthcheck[service.name].exec_command }}"
     exec_expected_positive_output = "{{ gobetween_healthcheck[service.name].exec_expected_positive_output }}"
     exec_expected_negative_output = "{{ gobetween_healthcheck[service.name].exec_expected_negative_output }}"
+    {% elif gobetween_healthcheck[service.name].kind == 'ping' %}
+    ping_timeout_duration = "{{ gobetween_healthcheck[service.name].ping_timeout_duration }}"
+    fails = {{ gobetween_healthcheck[service.name].fails }}
+    passes = {{ gobetween_healthcheck[service.name].passes }} 
+    {% endif %}
+
     {% endif %}
 
 {% endfor %}

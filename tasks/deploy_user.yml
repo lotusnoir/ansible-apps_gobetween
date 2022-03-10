@@ -8,6 +8,14 @@
   failed_when: false
   delegate_to: "{{ delegate_host }}"
 
+- name: "Create sudoersd file for the user"
+  template:
+    src: "gobetween.sudo.j2"
+    dest: "/etc/sudoers.d/gobetween.sudo"
+    owner: root
+    group: root
+    mode: 0644
+
 - name: "Set node user password valid time on {{ delegate_host }}"
   command: chage -M 99999 {{ gobetween_healthcheck_user }}
   changed_when: false

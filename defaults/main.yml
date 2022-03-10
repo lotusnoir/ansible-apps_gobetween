@@ -39,7 +39,7 @@ gobetween_targets:
     max_reponses: 10
     max_requests: 1
     targets: "{{ gobetween_target_servers }}"
-# - {name: syslog3, port: 514, protocol: udp, targets: ["server1", "server2" ] }
+  # - {name: syslog3, port: 514, protocol: udp, targets: ["server1", "server2" ] }
   - name: ingress #The name you want
     bind_address: 0.0.0.0
     port: 443
@@ -54,7 +54,7 @@ gobetween_targets:
     max_requests: 1
     kind: "srv"
     srv_lookup_server: "1.1.1.1" #Your DNS IP Server
-    srv_lookup_pattern: "https._tcp.my.srv.record." #The SRV record defined in your dns 
+    srv_lookup_pattern: "https._tcp.my.srv.record." #The SRV record defined in your dns
 
 gobetween_healthcheck:
   syslog2:
@@ -69,6 +69,5 @@ gobetween_healthcheck:
     interval: 5s
     timeout: 2s
     ping_timeout_duration: "250ms"
-    fails:  3
-    passes: 2 
-
+    fails: 3
+    passes: 2

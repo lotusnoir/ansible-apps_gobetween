@@ -66,6 +66,7 @@ push_src_on_github:
     - COMMENT=$(git log -1 --pretty=%B | head -1)
   script:
     - git clone git@github.com:${GITHUB_USER}/ansible-apps_gobetween.git /tmp/ansible-apps_gobetween
+    - find /tmp/ansible-apps_gobetween -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf "{}" +;
     - rm -rf .git
     - cp -r . /tmp/ansible-apps_gobetween/
     - cd /tmp/ansible-apps_gobetween

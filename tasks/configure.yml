@@ -17,7 +17,7 @@
 # shell: setcap CAP_NET_BIND_SERVICE=+eip /usr/local/bin/gobetween
 
 - name: "Create config file {{ gobetween_install_dir }}/gobetween.toml"
-  template:
+  ansible.builtin.template:
     src: "gobetween.toml.j2"
     dest: "{{ gobetween_install_dir }}/gobetween.toml"
     owner: "{{ gobetween_owner_group }}"
@@ -28,7 +28,7 @@
   tags: config
 
 - name: "Create init script for gobetween"
-  template:
+  ansible.builtin.template:
     src: "gobetween.service.j2"
     dest: "/etc/systemd/system/gobetween.service"
     owner: root
@@ -38,7 +38,7 @@
     - restart gobetween
 
 - name: "Add conf to logrotate"
-  template:
+  ansible.builtin.template:
     src: gobetween.logrotate
     dest: /etc/logrotate.d/gobetween
     mode: 0644

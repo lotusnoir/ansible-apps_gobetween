@@ -1,29 +1,33 @@
 ---
-- include: preflight.yml
+- name: "Include preflight.yml"
+  ansible.builtin.include_tasks: preflight.yml
   tags:
     - gobetween_install
     - gobetween_configure
     - gobetween_health
     - gobetween_run
 
-- include: install_app.yml
+- name: "Include install_app.yml"
+  ansible.builtin.include_tasks: install_app.yml
   become: true
   tags:
     - gobetween_install
 
-- include: configure.yml
+- name: "Include configure.yml"
+  ansible.builtin.include_tasks: configure.yml
   become: true
   tags:
     - gobetween_configure
 
-- include: healthcheck.yml
+- name: "Include healthcheck.yml"
+  ansible.builtin.include_tasks: healthcheck.yml
   become: true
   tags:
     - gobetween_health
 
 - name: "Ensure gobetween service is started and enabled"
   become: true
-  service:
+  ansible.builtin.service:
     daemon_reload: true
     name: gobetween
     state: started
@@ -32,5 +36,5 @@
   tags:
     - gobetween_run
 
-- name: flush handlers
-  meta: flush_handlers
+- name: "flush handlers"
+  ansible.builtin.meta: flush_handlers

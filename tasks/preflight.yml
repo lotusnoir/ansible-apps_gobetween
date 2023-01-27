@@ -1,12 +1,12 @@
 ---
 - name: "Check for gobetween executable file"
-  stat:
+  ansible.builtin.stat:
     path: "{{ gobetween_binary_file }}"
   changed_when: false
   register: gobetween_binary
 
 - name: "Check for gobetween version"
-  command: "{{ gobetween_binary_file }} -v"
+  ansible.builtin.command: "{{ gobetween_binary_file }} -v"
   changed_when: false
   register: gobetween_ins_version
   when: gobetween_binary.stat.exists

@@ -1,12 +1,12 @@
 ---
 - name: "Create {{ gobetween_owner_group }} system group"
-  group:
+  ansible.builtin.group:
     name: "{{ gobetween_owner_group }}"
     system: true
     state: present
 
 - name: "Create {{ gobetween_owner }} system user"
-  user:
+  ansible.builtin.user:
     name: "{{ gobetween_owner }}"
     system: true
     shell: "/usr/sbin/nologin"
@@ -14,7 +14,7 @@
     createhome: false
 
 - name: "Create an install dir {{ gobetween_install_dir }}"
-  file:
+  ansible.builtin.file:
     path: "{{ gobetween_install_dir }}"
     state: directory
     owner: "{{ gobetween_owner_group }}"
@@ -22,7 +22,7 @@
     mode: 0755
 
 - name: "Create log file"
-  file:
+  ansible.builtin.file:
     path: "{{ gobetween_log_file }}"
     state: touch
     owner: "{{ gobetween_owner_group }}"
@@ -30,15 +30,16 @@
     mode: 0644
   changed_when: false
 
-- when: not gobetween_binary.stat.exists or ( gobetween_ins_version is defined and gobetween_ins_version.stdout != "0.8.0+snapshot")
+- name: "Install tasks"
+  when: not gobetween_binary.stat.exists or ( gobetween_ins_version is defined and gobetween_ins_version.stdout != "0.8.0+snapshot")
   block:
     - name: "Install requierements"
-      package:
+      ansible.builtin.package:
         name: "ca-certificates"
         state: present
 
     - name: "Download gobetween..."
-      get_url:
+      ansible.builtin.get_url:
         url: "{{ gobetween_tgz_url }}"
         dest: "/tmp/{{ gobetween_tgz }}"
         timeout: 120
@@ -46,7 +47,7 @@
       when: not gobetween_install_local
 
     - name: "Unarchive gobetween..."
-      unarchive:
+      ansible.builtin.unarchive:
         remote_src: true
         src: "/tmp/{{ gobetween_tgz }}"
         dest: "/tmp/"
@@ -54,7 +55,7 @@
       when: not gobetween_install_local
 
     - name: "Copy gobetween binary..."
-      copy:
+      ansible.builtin.copy:
         src: "/tmp/gobetween"
         dest: "{{ gobetween_binary_file }}"
         mode: 0755
@@ -62,7 +63,7 @@
       when: not gobetween_install_local
 
     - name: "Copy gobetween local binary..."
-      copy:
+      ansible.builtin.copy:
         src: '{{ gobetween_local_file }}'
         dest: '{{ gobetween_binary_file }}'
         mode: '0755'

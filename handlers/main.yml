@@ -1,5 +1,5 @@
 ---
-- name: restart gobetween
+- name: Restart gobetween
   ansible.builtin.service:
     name: gobetween
     state: restarted

@@ -24,7 +24,7 @@
     group: "{{ gobetween_owner_group }}"
     mode: 0644
   notify:
-    - restart gobetween
+    - Restart gobetween
   tags: config
 
 - name: "Create init script for gobetween"
@@ -35,7 +35,7 @@
     group: root
     mode: 0644
   notify:
-    - restart gobetween
+    - Restart gobetween
 
 - name: "Add conf to logrotate"
   ansible.builtin.template:

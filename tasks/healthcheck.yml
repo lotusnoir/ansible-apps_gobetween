@@ -43,7 +43,8 @@
 #  delegate_to: "{{ item }}"
 #  loop: "{{ gobetween_target_servers }}"
 
-- include_tasks: deploy_user.yml
+- name: Deploy user
+  ansible.builtin.include_tasks: deploy_user.yml
   loop: "{{ gobetween_target_servers }}"
   loop_control:
     loop_var: delegate_host
@@ -56,4 +57,4 @@
     group: "{{ gobetween_owner_group }}"
     mode: '0755'
   notify:
-    - restart gobetween
+    - Restart gobetween

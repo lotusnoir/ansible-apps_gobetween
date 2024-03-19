@@ -36,5 +36,5 @@
   tags:
     - gobetween_run
 
-- name: "flush handlers"
+- name: "Flush handlers"
   ansible.builtin.meta: flush_handlers

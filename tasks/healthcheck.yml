@@ -3,6 +3,10 @@
   ansible.builtin.package:
     name: ssh
     state: present
+  register: pkg_result
+  retries: 12
+  delay: 10
+  until: pkg_result is success
 
 - name: "Generate ssh key for root"
   ansible.builtin.user:
@@ -17,7 +21,7 @@
     dest: "/root/.ssh/config"
     content: |
       StrictHostKeyChecking no
-    mode: 0644
+    mode: '0644'
 
 #- name: "Create a node user {{ gobetween_healthcheck_user }}"
 #  user:

@@ -14,7 +14,7 @@
     dest: "/etc/sudoers.d/gobetween.sudo"
     owner: root
     group: root
-    mode: 0644
+    mode: '0644'
 
 - name: "Set node user password valid time on {{ delegate_host }}"
   ansible.builtin.command: chage -M 99999 {{ gobetween_healthcheck_user }}
@@ -22,7 +22,7 @@
   delegate_to: "{{ delegate_host }}"
 
 - name: "Deploy {{ gobetween_healthcheck_user }} authorized_key on {{ delegate_host }}"
-  ansible.builtin.authorized_key:
+  ansible.posix.authorized_key:
     user: "{{ gobetween_healthcheck_user }}"
     key: "{{ gobetween_ssh_user.ssh_public_key }}"
     state: present

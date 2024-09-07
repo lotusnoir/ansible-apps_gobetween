@@ -6,7 +6,7 @@ if [ $# -ne 2 ];then
 	exit 1
 fi
 
-#TEST PING - If server not alive print "fail" and quit 
+#TEST PING - If server not alive print "fail" and quit
 line=$(ping ${1} -c 1 -s 1 -W 1| egrep "100% packet loss"| wc -l)
 if [ "$line" != "0" ];then
 	#echo "$1 no response, please check the host & firewall rule!"
@@ -15,7 +15,7 @@ if [ "$line" != "0" ];then
 fi
 
 
-#TEST PORT - If server is alive we check if the port is open - if not print "fail" and quit 
+#TEST PORT - If server is alive we check if the port is open - if not print "fail" and quit
 IP=$(/usr/bin/dig +short ${1})
 if [ $2 -eq "514" ] || [ $2 -eq "162" ]; then
 	ret=$(/bin/nc -unvz -w 1 ${IP} ${2} 2>&1 | egrep 'open'& > /dev/null)
@@ -30,7 +30,7 @@ if [ $? -ne 0 ] || [ "$ret" = "" ]; then
 fi
 
 
-#TEST SERVICE RUNNING - If server is alive we check if the port is open - if not print "fail" and quit 
+#TEST SERVICE RUNNING - If server is alive we check if the port is open - if not print "fail" and quit
 if [ $2 -eq "514" ]; then
 	service="syslog-ng.service"
 elif [ $2 -eq "162" ]; then
@@ -47,4 +47,3 @@ fi
 
 #Quit in all case
 exit 0
-

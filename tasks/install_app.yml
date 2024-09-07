@@ -19,7 +19,7 @@
     state: directory
     owner: "{{ gobetween_owner_group }}"
     group: "{{ gobetween_owner_group }}"
-    mode: 0755
+    mode: '0755'
 
 - name: "Create log file"
   ansible.builtin.file:
@@ -27,7 +27,7 @@
     state: touch
     owner: "{{ gobetween_owner_group }}"
     group: "{{ gobetween_owner_group }}"
-    mode: 0644
+    mode: '0644'
   changed_when: false
 
 - name: "Install tasks"
@@ -37,13 +37,17 @@
       ansible.builtin.package:
         name: "ca-certificates"
         state: present
+      register: pkg_result
+      retries: 12
+      delay: 10
+      until: pkg_result is success
 
     - name: "Download gobetween..."
       ansible.builtin.get_url:
         url: "{{ gobetween_tgz_url }}"
         dest: "/tmp/{{ gobetween_tgz }}"
         timeout: 120
-        mode: 0644
+        mode: '0644'
       when: not gobetween_install_local
 
     - name: "Unarchive gobetween..."
@@ -51,14 +55,14 @@
         remote_src: true
         src: "/tmp/{{ gobetween_tgz }}"
         dest: "/tmp/"
-        mode: 0644
+        mode: '0644'
       when: not gobetween_install_local
 
     - name: "Copy gobetween binary..."
       ansible.builtin.copy:
         src: "/tmp/gobetween"
         dest: "{{ gobetween_binary_file }}"
-        mode: 0755
+        mode: '0755'
         remote_src: true
       when: not gobetween_install_local
 

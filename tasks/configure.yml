@@ -22,7 +22,7 @@
     dest: "{{ gobetween_install_dir }}/gobetween.toml"
     owner: "{{ gobetween_owner_group }}"
     group: "{{ gobetween_owner_group }}"
-    mode: 0644
+    mode: '0644'
   notify:
     - Restart gobetween
   tags: config
@@ -33,7 +33,7 @@
     dest: "/etc/systemd/system/gobetween.service"
     owner: root
     group: root
-    mode: 0644
+    mode: '0644'
   notify:
     - Restart gobetween
 
@@ -41,4 +41,4 @@
   ansible.builtin.template:
     src: gobetween.logrotate
     dest: /etc/logrotate.d/gobetween
-    mode: 0644
+    mode: '0644'

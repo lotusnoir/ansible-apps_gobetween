@@ -1,18 +1,17 @@
 ---
-# Install
+### Install
 gobetween_version: "0.8.0"
 gobetween_binary_file: "/usr/local/bin/gobetween"
 gobetween_install_dir: "/etc/gobetween"
 gobetween_install_local: false
 gobetween_local_file: ""
-#gobetween_ulimit: "65536"
 gobetween_log_file: /var/log/gobetween.log
 gobetween_owner: gobetween
 gobetween_owner_group: gobetween
 
-# config
+### config
 gobetween_healthcheck_user: "gobetween"
-#gobetween_target_servers: {{ groups['group name'] }}
+# gobetween_target_servers: {{ groups['group name'] }}
 gobetween_target_servers:
   - localhost
   # - server2
@@ -40,7 +39,7 @@ gobetween_targets:
     max_requests: 1
     targets: "{{ gobetween_target_servers }}"
   # - {name: syslog3, port: 514, protocol: udp, targets: ["server1", "server2" ] }
-  - name: ingress #The name you want
+  - name: ingress
     bind_address: 0.0.0.0
     port: 443
     protocol: tcp
@@ -53,8 +52,8 @@ gobetween_targets:
     max_reponses: 10
     max_requests: 1
     kind: "srv"
-    srv_lookup_server: "1.1.1.1" #Your DNS IP Server
-    srv_lookup_pattern: "https._tcp.my.srv.record." #The SRV record defined in your dns
+    srv_lookup_server: "1.1.1.1" # Your DNS IP Server
+    srv_lookup_pattern: "https._tcp.my.srv.record." # The SRV record defined in your dns
 
 gobetween_healthcheck:
   syslog2:

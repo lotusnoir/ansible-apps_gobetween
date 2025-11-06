@@ -1,21 +1,4 @@
 ---
-#- name: "Change ulimit to {{ gobetween_ulimit }} for root"
-#  pam_limits:
-#    domain: root
-#    limit_type: '-'
-#    limit_item: nofile
-#    value: "{{ gobetween_ulimit }}"
-#
-#- name: "Change ulimit to {{ gobetween_ulimit }} for all"
-#  pam_limits:
-#    domain: '*'
-#    limit_type: '-'
-#    limit_item: nofile
-#    value: "{{ gobetween_ulimit }}"
-#
-# - name: Allow gobetween to bindport under 1024
-# shell: setcap CAP_NET_BIND_SERVICE=+eip /usr/local/bin/gobetween
-
 - name: "Create config file {{ gobetween_install_dir }}/gobetween.toml"
   ansible.builtin.template:
     src: "gobetween.toml.j2"

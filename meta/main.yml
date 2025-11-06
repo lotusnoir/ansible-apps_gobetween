@@ -4,12 +4,11 @@ galaxy_info:
   role_name: apps_gobetween
   description: "Deploy [gobetween](https://github.com/yyyar/gobetween/releases) load balancer system using ansible"
   license: "Apache License, Version 2.0"
-  min_ansible_version: 2.8
+  min_ansible_version: "2.8"
 
   platforms:
     - name: "Ubuntu"
       versions:
-        - "bionic"
         - "focal"
         - "jammy"
         - "noble"
@@ -18,13 +17,16 @@ galaxy_info:
         - "buster"
         - "bullseye"
         - "bookworm"
+        - "trixie"
     - name: "Rocky"
       versions:
+        - "10"
         - "9"
     - name: "OracleLinux"
       versions:
         - "8"
         - "9"
+        - "10"
     - name: "RedHat"
       versions:
         - "8"
